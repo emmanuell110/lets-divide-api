@@ -1,0 +1,9 @@
+# Ignorar configuración sensible
+.env
+
+# Ignorar dependencias
+node_modules/
+
+# Ignorar archivos temporales o logs
+npm-debug.log*
+.DS_Store

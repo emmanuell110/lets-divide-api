@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let s Divide - Aprende divisiones</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FFC107;
+            --accent-color: #2196F3;
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .welcome {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .sections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .level-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .level-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .level-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .exercise-area {
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .problem {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .visual-aid {
+            margin: 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .item {
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .item.cake {
+            background-image: url('/proyecto talento/ima/pastel-de-cumpleanos.png');
+        }
+        
+        .item.apple {
+            background-image: url('/proyecto talento/ima/manzana.png');
+        }
+        
+        .item.cookie {
+            background-image: url('/proyecto talento/ima/galleta.png');
+        }
+        
+        .answer-input {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            width: 100px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+        }
+        
+        .check-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .check-btn:hover {
+            background-color: #388e3c;
+        }
+        
+        .result {
+            margin-top: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        
+        .result.correct {
+            color: var(--primary-color);
+        }
+        
+        .result.incorrect {
+            color: #f44336;
+        }
+        
+        .grouping {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+        }
+        
+        .group {
+            display: flex;
+            border: 2px dashed #aaa;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            min-height: 50px;
+            justify-content: center;
+        }
+        
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .video-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .video-thumbnail {
+            width: 120px;
+            height: 90px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-info {
+            flex: 1;
+        }
+        
+        .video-btn {
+            padding: 0.25rem 0.75rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-pic {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 50%;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .login-btn {
+            padding: 0.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .sections {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Let s Divide</h1>
+        <p>¡Aprende divisiones de forma divertida!</p>
+    </header>
+    
+    <div class="container">
+        <div class="welcome">
+            <h2>¡Bienvenido a la aventura de las divisiones!</h2>
+            <p>Aprende a dividir con ejercicios interactivos, videos explicativos y divertidas ilustraciones.</p>
+            <div id="loginArea">
+                <button id="showLoginBtn" class="check-btn">Iniciar Sesión</button>
+                <button id="showRegisterBtn" class="check-btn" style="background-color: var(--secondary-color);">Registrarse</button>
+            </div>
+            <div id="loginForm" style="display: none;">
+                <div class="login-form">
+                    <h3>Iniciar Sesión</h3>
+                    <div class="form-group">
+                        <label for="username">Usuario:</label>
+                        <input type="text" id="username" class="form-input" placeholder="Tu nombre de usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" class="form-input" placeholder="Tu contraseña">
+                    </div>
+                    <button id="loginBtn" class="login-btn">Entrar</button>
+                    <button id="cancelLoginBtn" class="login-btn" style="background-color: #f44336;">Cancelar</button>
+                </div>
+            </div>
+            <div id="registerForm" style="display: none;">
+                <div class="login-form">
+                    <h3>Registrarse</h3>
+                    <div class="form-group">
+                        <label for="newUsername">Usuario:</label>
+                        <input type="text" id="newUsername" class="form-input" placeholder="Elige un nombre de usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Contraseña:</label>
+                        <input type="password" id="newPassword" class="form-input" placeholder="Elige una contraseña">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Edad:</label>
+                        <input type="number" id="age" class="form-input" min="7" max="14" placeholder="Tu edad">
+                    </div>
+                    <button id="registerBtn" class="login-btn">Registrarse</button>
+                    <button id="cancelRegisterBtn" class="login-btn" style="background-color: #f44336;">Cancelar</button>
+                </div>
+            </div>
+            <div id="userProfile" style="display: none;">
+                <div class="profile-section">
+                    <div class="profile-pic">👤</div>
+                    <div>
+                        <h3 id="profileUsername">Usuario</h3>
+                        <p>Nivel actual: <span id="userLevel">Principiante</span></p>
+                    </div>
+                </div>
+                <div class="progress-bars">
+                    <div>
+                        <div class="progress-label">
+                            <span>Progreso general:</span>
+                            <span id="overallProgress">50%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress-label">
+                            <span>Nivel actual:</span>
+                            <span id="levelProgress">30%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="check-btn" style="background-color: #f44336; margin-top: 1rem;">Cerrar Sesión</button>
+            </div>
+        </div>
+        
+        <div class="sections">
+            <div class="section">
+                <h2>Ejercicios de Divisiones</h2>
+                <div class="level-buttons">
+                    <button class="level-btn active" data-level="1">Nivel 1</button>
+                    <button class="level-btn" data-level="2">Nivel 2</button>
+                    <button class="level-btn" data-level="3">Nivel 3</button>
+                    <button class="level-btn" data-level="4">Nivel 4</button>
+                    <button class="level-btn" data-level="5">Nivel 5</button>
+                </div>
+                <div class="exercise-area">
+                    <div class="problem">
+                        <span id="dividend">6</span> ÷ <span id="divisor">2</span> = <input type="number" class="answer-input" id="userAnswer">
+                    </div>
+                    <div class="visual-aid" id="visualAid"></div>
+                    <div class="grouping" id="groupingArea"></div>
+                    <button class="check-btn" id="checkAnswer">Comprobar</button>
+                    <div class="result" id="result"></div>
+                </div>
+                <button class="check-btn" id="nextProblem">Siguiente Problema</button>
+            </div>
+            
+            <div class="section">
+                <h2>Videos Explicativos</h2>
+                <div class="level-buttons">
+                    <button class="level-btn active" data-video-level="1">Nivel 1</button>
+                    <button class="level-btn" data-video-level="2">Nivel 2</button>
+                    <button class="level-btn" data-video-level="3">Nivel 3</button>
+                    <button class="level-btn" data-video-level="4">Nivel 4</button>
+                    <button class="level-btn" data-video-level="5">Nivel 5</button>
+                </div>
+                <div class="video-list" id="videoList">
+                    <div class="video-card">
+                        <div class="video-thumbnail">🎬</div>
+                        <div class="video-info">
+                            <h3>Introducción a las divisiones</h3>
+                            <p>Aprende los conceptos básicos de la división</p>
+                        </div>
+                        <button class="video-btn">Ver</button>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">🎬</div>
+                        <div class="video-info">
+                            <h3>Divisiones con ilustraciones</h3>
+                            <p>Visualiza cómo funcionan las divisiones</p>
+                        </div>
+                        <button class="video-btn">Ver</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Let s Divide - Plataforma educativa para aprender divisiones © 2025</p>
+    </footer>
+
+    <script>
+        // Variables globales
+        
+        let currentLevel = 1;
+        let currentVideoLevel = 1;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let problems = {
+            1: [
+                {dividend: 6, divisor: 2},
+                {dividend: 4, divisor: 2},
+                {dividend: 3, divisor: 1},
+                {dividend: 8, divisor: 4},
+                {dividend: 5, divisor: 1}
+            ],
+            2: [
+                {dividend: 10, divisor: 2},
+                {dividend: 12, divisor: 3},
+                {dividend: 8, divisor: 2},
+                {dividend: 9, divisor: 3},
+                {dividend: 6, divisor: 3}
+            ],
+            3: [
+                {dividend: 15, divisor: 3},
+                {dividend: 20, divisor: 4},
+                {dividend: 18, divisor: 6},
+                {dividend: 14, divisor: 2},
+                {dividend: 16, divisor: 4}
+            ],
+            4: [
+                {dividend: 24, divisor: 6},
+                {dividend: 32, divisor: 4},
+                {dividend: 27, divisor: 9},
+                {dividend: 25, divisor: 5},
+                {dividend: 30, divisor: 5}
+            ],
+            5: [
+                {dividend: 48, divisor: 8},
+                {dividend: 63, divisor: 9},
+                {dividend: 56, divisor: 7},
+                {dividend: 72, divisor: 9},
+                {dividend: 81, divisor: 9}
+            ]
+        };
+        
+        let videos = {
+            1: [
+            {
+                title: "Introducción a las divisiones", 
+                description: "Aprende los conceptos básicos de la división",
+                url: "/proyecto talento/videos/Introducción a la división.mp4" // Añadir la URL del video
+            },
+            {
+                title: "Divisiones con ilustraciones", 
+                description: "Visualiza cómo funcionan las divisiones",
+                url: "/proyecto talento/videos/Divisiones con ilustraciones.mp4" // Añadir la URL del video
+            }
+            ],
+            2: [
+                {title: "Divisiones con números mayores", description: "Aprende a dividir números de dos cifras", url: "/proyecto talento/videos/Divisiones con números mayores.mp4"},
+                {title: "División como reparto equitativo", description: "Entendiendo el concepto de repartir", url: "/proyecto talento/videos/División como reparto equitativo.mp4"}
+            ],
+            3: [
+                {title: "Divisiones con resto", description: "Qué hacer cuando la división no es exacta", url: "/proyecto talento/videos/Divisiones con resto.mp4"},
+                {title: "Problemas de divisiones", description: "Aplicando divisiones a problemas cotidianos", url: "/proyecto talento/videos/Problemas de divisiones.mp4"}
+            ],
+            4: [
+                {title: "División larga", description: "Método para dividir números grandes", url: "/proyecto talento/videos/División larga.mp4"},
+                {title: "Divisibilidad", description: "Aprende cuándo un número es divisible por otro", url: "/proyecto talento/videos/Divisibilidad.mp4"}
+            ],
+            5: [
+                {title: "Fracciones y divisiones", description: "La relación entre fracciones y divisiones", url: "/proyecto talento/videos/Fracciones y divisiones.mp4"},
+                {title: "Aplicaciones avanzadas", description: "Cómo usar divisiones en situaciones complejas", url: "/proyecto talento/videos/Aplicaciones avanzadas.mp4"}
+            ]
+        };
+        
+        let currentProblemIndex = 0;
+        
+        // Elementos DOM
+        const levelButtons = document.querySelectorAll('.level-btn[data-level]');
+        const videoLevelButtons = document.querySelectorAll('.level-btn[data-video-level]');
+        const dividendElement = document.getElementById('dividend');
+        const divisorElement = document.getElementById('divisor');
+        const answerInput = document.getElementById('userAnswer');
+        const checkButton = document.getElementById('checkAnswer');
+        const nextButton = document.getElementById('nextProblem');
+        const resultElement = document.getElementById('result');
+        const visualAidElement = document.getElementById('visualAid');
+        const groupingAreaElement = document.getElementById('groupingArea');
+        const videoListElement = document.getElementById('videoList');
+        
+        // Elementos de login/registro
+        const showLoginBtn = document.getElementById('showLoginBtn');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginArea = document.getElementById('loginArea');
+        const userProfile = document.getElementById('userProfile');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+        const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const profileUsername = document.getElementById('profileUsername');
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            loadProblem();
+            updateVideoList();
+            checkLoginStatus();
+        });
+
+        function openVideoPlayer(title, videoUrl) {
+            // Crear un modal para reproducir el video
+            const modal = document.createElement('div');
+            modal.className = 'video-modal';
+            modal.innerHTML = `
+                <div class="video-modal-content">
+                    <div class="video-modal-header">
+                        <h3>${title}</h3>
+                        <button class="close-btn">&times;</button>
+                    </div>
+                    <div class="video-player">
+                        <iframe 
+                            width="560" 
+                            height="315" 
+                            src="${videoUrl}" 
+                            frameborder="0" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Agregar estilos CSS para el modal
+            const style = document.createElement('style');
+            style.textContent = `
+                .video-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0,0,0,0.7);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                }
+                .video-modal-content {
+                    background-color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    max-width: 800px;
+                    width: 90%;
+                }
+                .video-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 15px;
+                }
+                .close-btn {
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                }
+                .video-player {
+                    position: relative;
+                    padding-bottom: 56.25%; /* Proporción 16:9 */
+                    height: 0;
+                    overflow: hidden;
+                }
+                .video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Agregar funcionalidad para cerrar el modal
+            const closeBtn = modal.querySelector('.close-btn');
+            closeBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+        }
+        
+        // Configurar listeners de eventos
+        function setupEventListeners() {
+            // Nivel de ejercicios
+            levelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    levelButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentLevel = parseInt(button.dataset.level);
+                    currentProblemIndex = 0;
+                    loadProblem();
+                });
+            });
+            
+            // Nivel de videos
+            videoLevelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    videoLevelButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentVideoLevel = parseInt(button.dataset.videoLevel);
+                    updateVideoList();
+                });
+            });
+            
+            // Comprobar respuesta
+            checkButton.addEventListener('click', checkAnswer);
+            
+            // Siguiente problema
+            nextButton.addEventListener('click', () => {
+                currentProblemIndex = (currentProblemIndex + 1) % problems[currentLevel].length;
+                loadProblem();
+            });
+            
+            // Eventos de login/registro
+            showLoginBtn.addEventListener('click', () => {
+                loginForm.style.display = 'block';
+                loginArea.style.display = 'none';
+            });
+            
+            showRegisterBtn.addEventListener('click', () => {
+                registerForm.style.display = 'block';
+                loginArea.style.display = 'none';
+            });
+            
+            cancelLoginBtn.addEventListener('click', () => {
+                loginForm.style.display = 'none';
+                loginArea.style.display = 'block';
+            });
+            
+            cancelRegisterBtn.addEventListener('click', () => {
+                registerForm.style.display = 'none';
+                loginArea.style.display = 'block';
+            });
+            
+            loginBtn.addEventListener('click', login);
+            registerBtn.addEventListener('click', register);
+            logoutBtn.addEventListener('click', logout);
+        }
+        
+        // Cargar un problema en pantalla
+        function loadProblem() {
+            const problem = problems[currentLevel][currentProblemIndex];
+            dividendElement.textContent = problem.dividend;
+            divisorElement.textContent = problem.divisor;
+            answerInput.value = '';
+            resultElement.textContent = '';
+            resultElement.className = 'result';
+            
+            // Crear ayuda visual
+            createVisualAid(problem.dividend, problem.divisor);
+        }
+        
+        // Crear ayuda visual según el nivel
+        function createVisualAid(dividend, divisor) {
+            visualAidElement.innerHTML = '';
+            groupingAreaElement.innerHTML = '';
+            
+            if (currentLevel <= 2) {
+                // Niveles 1-2: Mostrar objetos simples
+                for (let i = 0; i < dividend; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'item cake';
+                    visualAidElement.appendChild(item);
+                }
+                
+                // Crear grupos para repartir
+                for (let i = 0; i < divisor; i++) {
+                    const group = document.createElement('div');
+                    group.className = 'group';
+                    groupingAreaElement.appendChild(group);
+                }
+            } else if (currentLevel <= 3) {
+                // Nivel 3: Mostrar objetos diferentes
+                for (let i = 0; i < dividend; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'item apple';
+                    visualAidElement.appendChild(item);
+                }
+            } else {
+                // Niveles 4-5: Sin ayuda visual, más avanzado
+                visualAidElement.style.display = 'none';
+                groupingAreaElement.style.display = 'none';
+                return;
+            }
+            
+            visualAidElement.style.display = 'flex';
+            groupingAreaElement.style.display = 'flex';
+        }
+        
+        // Comprobar la respuesta del usuario
+        function checkAnswer() {
+            const problem = problems[currentLevel][currentProblemIndex];
+            const userAnswer = parseInt(answerInput.value);
+            const correctAnswer = problem.dividend / problem.divisor;
+            
+            if (userAnswer === correctAnswer) {
+                resultElement.textContent = '¡Correcto! 🎉';
+                resultElement.className = 'result correct';
+                
+                // Si el usuario está logueado, guardar progreso
+                if (isLoggedIn) {
+                    saveProgress(currentLevel, currentProblemIndex, true);
+                }
+            } else {
+                resultElement.textContent = `Incorrecto. La respuesta correcta es ${correctAnswer}`;
+                resultElement.className = 'result incorrect';
+                
+                // Si el usuario está logueado, guardar intento fallido
+                if (isLoggedIn) {
+                    saveProgress(currentLevel, currentProblemIndex, false);
+                }
+            }
+        }
+        
+        // Actualizar la lista de videos según el nivel
+        function updateVideoList() {
+            videoListElement.innerHTML = '';
+            
+            videos[currentVideoLevel].forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                
+                videoCard.innerHTML = `
+                    <div class="video-thumbnail">🎬</div>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                    </div>
+                    <button class="video-btn">Ver</button>
+                `;
+                
+                videoListElement.appendChild(videoCard);
+                
+                // Agregar evento al botón de ver video
+const viewButton = videoCard.querySelector('.video-btn');
+viewButton.addEventListener('click', () => {
+    // Aquí es donde se reproduciría el video o se redireccionaría a su URL
+    const videoUrl = video.url; // Necesitarías agregar esta propiedad a tus objetos de video
+    
+    // Abrir el video en una ventana modal o reproducirlo directamente
+    openVideoPlayer(video.title, videoUrl);
+    
+    // Si el usuario está logueado, guardar que vio el video
+    if (isLoggedIn) {
+        saveVideoView(currentVideoLevel, video.title);
+    }
+});
+            });
+        }
+        
+        // Funciones de autenticación
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            // En una aplicación real, esto se conectaría a la base de datos MySQL
+            // Aquí simulamos la autenticación para demo
+            simulateDbLogin(username, password);
+        }
+        
+        function register() {
+            const username = document.getElementById('newUsername').value;
+            const password = document.getElementById('newPassword').value;
+            const age = document.getElementById('age').value;
+            
+            if (!username || !password || !age) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            // En una aplicación real, esto se conectaría a la base de datos MySQL
+            // Aquí simulamos el registro para demo
+            simulateDbRegister(username, password, age);
+        }
+        
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            userProfile.style.display = 'none';
+            loginArea.style.display = 'block';
+            
+            // En una aplicación real, esto haría logout en el servidor
+            console.log('Usuario desconectado');
+        }
+        
+        function checkLoginStatus() {
+            // En una aplicación real, verificaría la sesión en el servidor
+            // Aquí simulamos para demo
+            if (localStorage.getItem('LetsDivideUser')) {
+                try {
+                    currentUser = JSON.parse(localStorage.getItem('LetsDivideUser'));
+                    isLoggedIn = true;
+                    showUserProfile();
+                } catch(e) {
+                    console.error('Error al cargar sesión de usuario:', e);
+                }
+            }
+        }
+        
+        function showUserProfile() {
+            if (!currentUser) return;
+            
+            loginArea.style.display = 'none';
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            userProfile.style.display = 'block';
+            
+            profileUsername.textContent = currentUser.username;
+            document.getElementById('userLevel').textContent = getUserLevel();
+            document.getElementById('overallProgress').textContent = `${currentUser.overallProgress || 0}%`;
+            document.getElementById('levelProgress').textContent = `${currentUser.levelProgress || 0}%`;
+            
+            // Actualizar barras de progreso
+            document.querySelector('#overallProgress').previousElementSibling.nextElementSibling.querySelector('.progress-fill').style.width = `${currentUser.overallProgress || 0}%`;
+            document.querySelector('#levelProgress').previousElementSibling.nextElementSibling.querySelector('.progress-fill').style.width = `${currentUser.levelProgress || 0}%`;
+        }
+        
+        function getUserLevel() {
+            const progress = currentUser.overallProgress || 0;
+            if (progress < 20) return 'Principiante';
+            if (progress < 40) return 'Aprendiz';
+            if (progress < 60) return 'Intermedio';
+            if (progress < 80) return 'Avanzado';
+            return 'Experto';
+        }
+        
+        // Funciones de simulación de base de datos
+        function simulateDbLogin(username, password) {
+            // En una aplicación real esto sería una solicitud AJAX a tu API
+            console.log(`Intento de login: ${username}, ${password}`);
+            
+            // Simulación de respuesta exitosa
+            setTimeout(() => {
+                // Verificar si el usuario existe en localStorage (simulación)
+                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    currentUser = {
+                        id: user.id,
+                        username: user.username,
+                        age: user.age,
+                        overallProgress: user.overallProgress || 0,
+                        levelProgress: user.levelProgress || 0
+                    };
+                    isLoggedIn = true;
+                    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+                    showUserProfile();
+                    alert(`¡Bienvenido de nuevo, ${username}!`);
+                } else {
+                    alert('Usuario o contraseña incorrectos');
+                }
+            }, 500);
+        }
+        
+        function simulateDbRegister(username, password, age) {
+            // En una aplicación real esto sería una solicitud AJAX a tu API
+            console.log(`Intento de registro: ${username}, ${password}, ${age}`);
+            
+            // Simulación de respuesta exitosa
+            setTimeout(() => {
+                // Verificar si el usuario ya existe en localStorage (simulación)
+                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
+                if (users.some(u => u.username === username)) {
+                    alert('Este nombre de usuario ya existe');
+                    return;
+                }
+                
+                // Crear nuevo usuario
+                const newUser = {
+                    id: Date.now().toString(), // Simulación de ID único
+                    username,
+                    password,
+                    age,
+                    overallProgress: 0,
+                    levelProgress: 0,
+                    completedProblems: {},
+                    viewedVideos: []
+                };
+                
+                // Guardar usuario en localStorage (simulación)
+                users.push(newUser);
+                localStorage.setItem('LetsDivideUsers', JSON.stringify(users));
+                
+                // Iniciar sesión automáticamente
+                currentUser = {
+                    id: newUser.id,
+                    username: newUser.username,
+                    age: newUser.age,
+                    overallProgress: 0,
+                    levelProgress: 0
+                };
+                
+                isLoggedIn = true;
+                localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+                showUserProfile();
+                alert(`¡Bienvenido, ${username}! Tu cuenta ha sido creada con éxito.`);
+            }, 500);
+        }
+        
+        function saveProgress(level, problemIndex, isCorrect) {
+            if (!isLoggedIn || !currentUser) return;
+            
+            // En una aplicación real, esto guardaría en MySQL
+            console.log(`Guardando progreso: Nivel ${level}, Problema ${problemIndex}, Correcto: ${isCorrect}`);
+            
+            // Simulación de actualización de progreso
+            setTimeout(() => {
+                // Recuperar usuarios de localStorage
+                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                
+                if (userIndex !== -1) {
+                    // Actualizar progreso del problema
+                    if (!users[userIndex].completedProblems) {
+                        users[userIndex].completedProblems = {};
+                    }
+                    
+                    const problemKey = `${level}-${problemIndex}`;
+                    users[userIndex].completedProblems[problemKey] = isCorrect;
+                    
+                    // Calcular progreso general
+                    const totalProblems = Object.keys(problems).reduce((sum, lvl) => sum + problems[lvl].length, 0);
+                    const completedCorrect = Object.values(users[userIndex].completedProblems).filter(v => v === true).length;
+                    const overallProgress = Math.round((completedCorrect / totalProblems) * 100);
+                    
+                    // Calcular progreso de nivel actual
+                    const levelProblems = problems[level].length;
+                    const levelCompletedCorrect = Object.keys(users[userIndex].completedProblems)
+                        .filter(k => k.startsWith(`${level}-`) && users[userIndex].completedProblems[k] === true)
+                        .length;
+                    const levelProgress = Math.round((levelCompletedCorrect / levelProblems) * 100);
+                    
+                    // Actualizar usuario
+                    users[userIndex].overallProgress = overallProgress;
+                    users[userIndex].levelProgress = levelProgress;
+                    
+                    // Actualizar currentUser
+                    currentUser.overallProgress = overallProgress;
+                    currentUser.levelProgress = levelProgress;
+                    
+                    // Guardar cambios
+                    localStorage.setItem('LetsDivideUsers', JSON.stringify(users));
+                    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+                    
+                    // Actualizar interfaz
+                    showUserProfile();
+                }
+            }, 300);
+        }
+        
+        function saveVideoView(level, videoTitle) {
+            if (!isLoggedIn || !currentUser) return;
+            
+            // En una aplicación real, esto guardaría en MySQL
+            console.log(`Guardando visualización de video: Nivel ${level}, Título: ${videoTitle}`);
+            
+            // Simulación de actualización de videos vistos
+            setTimeout(() => {
+                // Recuperar usuarios de localStorage
+                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                
+                if (userIndex !== -1) {
+                    // Actualizar videos vistos
+                    if (!users[userIndex].viewedVideos) {
+                        users[userIndex].viewedVideos = [];
+                    }
+                    
+                    const videoKey = `${level}-${videoTitle}`;
+                    if (!users[userIndex].viewedVideos.includes(videoKey)) {
+                        users[userIndex].viewedVideos.push(videoKey);
+                    }
+                    
+                    // Guardar cambios
+                    localStorage.setItem('LetsDivideUsers', JSON.stringify(users));
+                }
+            }, 300);
+        }
+        
+        // Código para conectar con MySQL (simulado para este ejemplo)
+        // En una aplicación real, esto se manejaría en el servidor con PHP, Node.js, etc.
+        
+        /*
+        ESTRUCTURA DE LA BASE DE DATOS MYSQL:
+        
+        -- Creación de la base de datos
+        CREATE DATABASE dividivertido;
+        USE dividivertido;
+        
+        -- Tabla de usuarios
+        CREATE TABLE usuarios (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            edad INT NOT NULL,
+            fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+            ultimo_acceso DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        -- Tabla de progreso
+        CREATE TABLE progreso (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            nivel INT NOT NULL,
+            problema_index INT NOT NULL,
+            correcto BOOLEAN NOT NULL,
+            fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        );
+        
+        -- Tabla de videos vistos
+        CREATE TABLE videos_vistos (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            usuario_id INT NOT NULL,
+            nivel_video INT NOT NULL,
+            titulo_video VARCHAR(100) NOT NULL,
+            fecha_visto DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        );
+        
+        -- Tabla de estadísticas de usuario
+        CREATE TABLE estadisticas (
+            usuario_id INT PRIMARY KEY,
+            progreso_general FLOAT DEFAULT 0,
+            progreso_nivel_actual FLOAT DEFAULT 0,
+            nivel_actual INT DEFAULT 1,
+            problemas_completados INT DEFAULT 0,
+            aciertos INT DEFAULT 0,
+            fallos INT DEFAULT 0,
+            ultima_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        );
+        */
+        
+        /* 
+        EJEMPLO DE CÓDIGO PHP PARA LA CONEXIÓN Y OPERACIONES CON LA BASE DE DATOS:
+        
+        <?php
+        // Conexión a la base de datos
+        $servername = "localhost";
+        $username = "usuario_db";
+        $password = "contraseña_db";
+        $dbname = "dividivertido";
+        
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        
+        if ($conn->connect_error) {
+            die("Conexión fallida: " . $conn->connect_error);
+        }
+        
+        // Función para registrar un nuevo usuario
+        function registrarUsuario($username, $password, $edad) {
+            global $conn;
+            
+            // Hash de la contraseña para mayor seguridad
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            
+            $sql = "INSERT INTO usuarios (username, password, edad) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssi", $username, $hashedPassword, $edad);
+            
+            if ($stmt->execute()) {
+                $usuario_id = $stmt->insert_id;
+                
+                // Crear registro en estadísticas
+                $sql = "INSERT INTO estadisticas (usuario_id) VALUES (?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $usuario_id);
+                $stmt->execute();
+                
+                return $usuario_id;
+            } else {
+                return false;
+            }
+        }
+        
+        // Función para verificar login
+        function verificarLogin($username, $password) {
+            global $conn;
+            
+            $sql = "SELECT id, password FROM usuarios WHERE username = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 1) {
+                $row = $result->fetch_assoc();
+                if (password_verify($password, $row["password"])) {
+                    // Actualizar último acceso
+                    $sql = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $row["id"]);
+                    $stmt->execute();
+                    
+                    return $row["id"];
+                }
+            }
+            
+            return false;
+        }
+        
+        // Función para guardar progreso
+        function guardarProgreso($usuario_id, $nivel, $problema_index, $correcto) {
+            global $conn;
+            
+            $sql = "INSERT INTO progreso (usuario_id, nivel, problema_index, correcto) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iiib", $usuario_id, $nivel, $problema_index, $correcto);
+            
+            if ($stmt->execute()) {
+                // Actualizar estadísticas
+                actualizarEstadisticas($usuario_id);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        // Función para registrar video visto
+        function registrarVideoVisto($usuario_id, $nivel_video, $titulo_video) {
+            global $conn;
+            
+            $sql = "INSERT INTO videos_vistos (usuario_id, nivel_video, titulo_video) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iis", $usuario_id, $nivel_video, $titulo_video);
+            
+            return $stmt->execute();
+        }
+        
+        // Función para actualizar estadísticas
+        function actualizarEstadisticas($usuario_id) {
+            global $conn;
+            
+            // Obtener datos de progreso
+            $sql = "SELECT 
+                    COUNT(*) as total_problemas,
+                    SUM(CASE WHEN correcto = 1 THEN 1 ELSE 0 END) as aciertos,
+                    SUM(CASE WHEN correcto = 0 THEN 1 ELSE 0 END) as fallos
+                FROM progreso 
+                WHERE usuario_id = ?";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $usuario_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            
+            $total_problemas = $row["total_problemas"];
+            $aciertos = $row["aciertos"];
+            $fallos = $row["fallos"];
+            
+            // Calcular nivel actual (basado en aciertos)
+            $nivel_actual = 1;
+            if ($aciertos >= 25) $nivel_actual = 5;
+            else if ($aciertos >= 15) $nivel_actual = 4;
+            else if ($aciertos >= 10) $nivel_actual = 3;
+            else if ($aciertos >= 5) $nivel_actual = 2;
+            
+            // Calcular progreso general (aproximado)
+            $progreso_general = min(100, ($aciertos / 50) * 100); // Asumiendo 50 problemas en total
+            
+            // Calcular progreso del nivel actual
+            $sql = "SELECT 
+                    COUNT(*) as problemas_nivel,
+                    SUM(CASE WHEN correcto = 1 THEN 1 ELSE 0 END) as aciertos_nivel
+                FROM progreso 
+                WHERE usuario_id = ? AND nivel = ?";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ii", $usuario_id, $nivel_actual);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            
+            $problemas_nivel = $row["problemas_nivel"];
+            $aciertos_nivel = $row["aciertos_nivel"];
+            
+            $progreso_nivel = ($problemas_nivel > 0) ? ($aciertos_nivel / $problemas_nivel) * 100 : 0;
+            
+            // Actualizar estadísticas
+            $sql = "UPDATE estadisticas SET 
+                    progreso_general = ?,
+                    progreso_nivel_actual = ?,
+                    nivel_actual = ?,
+                    problemas_completados = ?,
+                    aciertos = ?,
+                    fallos = ?,
+                    ultima_actualizacion = NOW()
+                WHERE usuario_id = ?";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ddiiiii", $progreso_general, $progreso_nivel, $nivel_actual, $total_problemas, $aciertos, $fallos, $usuario_id);
+            
+            return $stmt->execute();
+        }
+        
+        // Función para obtener perfil de usuario
+        function obtenerPerfil($usuario_id) {
+            global $conn;
+            
+            $sql = "SELECT u.username, u.edad, e.* 
+                    FROM usuarios u
+                    JOIN estadisticas e ON u.id = e.usuario_id
+                    WHERE u.id = ?";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $usuario_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 1) {
+                return $result->fetch_assoc();
+            } else {
+                return false;
+            }
+        }
+        ?>
+        */
+        
+        /* 
+        EJEMPLO DE API ENDPOINTS PARA CONECTAR FRONTEND Y BACKEND:
+        
+        // LOGIN
+        app.post('/api/login', (req, res) => {
+            const { username, password } = req.body;
+            
+            // Llamar a función PHP o usar Node.js con MySQL
+            db.query('SELECT id, password FROM usuarios WHERE username = ?', [username], (err, results) => {
+                if (err) return res.status(500).json({ error: 'Error de servidor' });
+                
+                if (results.length === 0) {
+                    return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+                }
+                
+                const user = results[0];
+                const passwordMatch = bcrypt.compareSync(password, user.password);
+                
+                if (!passwordMatch) {
+                    return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+                }
+                
+                // Actualizar último acceso
+                db.query('UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?', [user.id]);
+                
+                // Obtener perfil
+                db.query(`
+                    SELECT u.username, u.edad, e.* 
+                    FROM usuarios u
+                    JOIN estadisticas e ON u.id = e.usuario_id
+                    WHERE u.id = ?
+                `, [user.id], (err, profileResults) => {
+                    if (err) return res.status(500).json({ error: 'Error al cargar perfil' });
+                    
+                    // Crear token JWT
+                    const token = jwt.sign({ id: user.id }, 'tu_clave_secreta', { expiresIn: '1h' });
+                    
+                    res.json({
+                        token,
+                        user: profileResults[0]
+                    });
+                });
+            });
+        });
+        
+        // REGISTRO
+        app.post('/api/register', (req, res) => {
+            const { username, password, age } = req.body;
+            
+            // Verificar si usuario existe
+            db.query('SELECT id FROM usuarios WHERE username = ?', [username], (err, results) => {
+                if (err) return res.status(500).json({ error: 'Error de servidor' });
+                
+                if (results.length > 0) {
+                    return res.status(409).json({ error: 'Este nombre de usuario ya existe' });
+                }
+                
+                // Hash de contraseña
+                const hashedPassword = bcrypt.hashSync(password, 10);
+                
+                // Insertar usuario
+                db.query('INSERT INTO usuarios (username, password, edad) VALUES (?, ?, ?)', 
+                    [username, hashedPassword, age], (err, result) => {
+                    if (err) return res.status(500).json({ error: 'Error al registrar usuario' });
+                    
+                    const userId = result.insertId;
+                    
+                    // Crear estadísticas
+                    db.query('INSERT INTO estadisticas (usuario_id) VALUES (?)', [userId], (err) => {
+                        if (err) return res.status(500).json({ error: 'Error al crear perfil' });
+                        
+                        // Crear token JWT
+                        const token = jwt.sign({ id: userId }, 'tu_clave_secreta', { expiresIn: '1h' });
+                        
+                        res.json({
+                            token,
+                            user: {
+                                id: userId,
+                                username,
+                                edad: age,
+                                progreso_general: 0,
+                                progreso_nivel_actual: 0,
+                                nivel_actual: 1
+                            }
+                        });
+                    });
+                });
+            });
+        });
+        
+        // GUARDAR PROGRESO
+        app.post('/api/progress', authenticateToken, (req, res) => {
+            const { nivel, problemaIndex, correcto } = req.body;
+            const userId = req.user.id;
+            
+            db.query('INSERT INTO progreso (usuario_id, nivel, problema_index, correcto) VALUES (?, ?, ?, ?)',
+                [userId, nivel, problemaIndex, correcto], (err) => {
+                if (err) return res.status(500).json({ error: 'Error al guardar progreso' });
+                
+                // Actualizar estadísticas
+                actualizarEstadisticas(userId, (err, stats) => {
+                    if (err) return res.status(500).json({ error: 'Error al actualizar estadísticas' });
+                    
+                    res.json({ success: true, stats });
+                });
+            });
+        });
+        
+        // REGISTRAR VIDEO VISTO
+        app.post('/api/video-view', authenticateToken, (req, res) => {
+            const { nivelVideo, tituloVideo } = req.body;
+            const userId = req.user.id;
+            
+            db.query('INSERT INTO videos_vistos (usuario_id, nivel_video, titulo_video) VALUES (?, ?, ?)',
+                [userId, nivelVideo, tituloVideo], (err) => {
+                if (err) return res.status(500).json({ error: 'Error al registrar video visto' });
+                
+                res.json({ success: true });
+            });
+        });
+        */
+    </script>
+</body>
+</html>

@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let s Divide - Aprende divisiones</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FFC107;
+            --accent-color: #2196F3;
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .welcome {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .sections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .level-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .level-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .level-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .exercise-area {
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .problem {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .visual-aid {
+            margin: 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .item {
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .item.cake   { background-image: url('ima/pastel-de-cumpleanos.png'); }
+.item.apple  { background-image: url('ima/manzana.png'); }
+.item.cookie { background-image: url('ima/galleta.png'); }
+
+        
+        .answer-input {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            width: 100px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+        }
+        
+        .check-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .check-btn:hover {
+            background-color: #388e3c;
+        }
+        
+        .result {
+            margin-top: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        
+        .result.correct {
+            color: var(--primary-color);
+        }
+        
+        .result.incorrect {
+            color: #f44336;
+        }
+        
+        .grouping {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+        }
+        
+        .group {
+            display: flex;
+            border: 2px dashed #aaa;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            min-height: 50px;
+            justify-content: center;
+        }
+        
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .video-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .video-thumbnail {
+            width: 120px;
+            height: 90px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-info {
+            flex: 1;
+        }
+        
+        .video-btn {
+            padding: 0.25rem 0.75rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-pic {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 50%;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .login-btn {
+            padding: 0.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .sections {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Let s Divide</h1>
+        <p>¡Aprende divisiones de forma divertida!</p>
+    </header>
+    
+    <div class="container">
+        <div class="welcome">
+            <h2>¡Bienvenido a la aventura de las divisiones!</h2>
+            <p>Aprende a dividir con ejercicios interactivos, videos explicativos y divertidas ilustraciones.</p>
+            <div id="loginArea">
+                <button id="showLoginBtn" class="check-btn">Iniciar Sesión</button>
+                <button id="showRegisterBtn" class="check-btn" style="background-color: var(--secondary-color);">Registrarse</button>
+            </div>
+            <div id="loginForm" style="display: none;">
+                <div class="login-form">
+                    <h3>Iniciar Sesión</h3>
+                    <div class="form-group">
+                        <label for="username">Usuario:</label>
+                        <input type="text" id="username" class="form-input" placeholder="Tu nombre de usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" class="form-input" placeholder="Tu contraseña">
+                    </div>
+                    <button id="loginBtn" class="login-btn">Entrar</button>
+                    <button id="cancelLoginBtn" class="login-btn" style="background-color: #f44336;">Cancelar</button>
+                </div>
+            </div>
+            <div id="registerForm" style="display: none;">
+                <div class="login-form">
+                    <h3>Registrarse</h3>
+                    <div class="form-group">
+                        <label for="newUsername">Usuario:</label>
+                        <input type="text" id="newUsername" class="form-input" placeholder="Elige un nombre de usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Contraseña:</label>
+                        <input type="password" id="newPassword" class="form-input" placeholder="Elige una contraseña">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Edad:</label>
+                        <input type="number" id="age" class="form-input" min="7" max="14" placeholder="Tu edad">
+                    </div>
+                    <button id="registerBtn" class="login-btn">Registrarse</button>
+                    <button id="cancelRegisterBtn" class="login-btn" style="background-color: #f44336;">Cancelar</button>
+                </div>
+            </div>
+            <div id="userProfile" style="display: none;">
+                <div class="profile-section">
+                    <div class="profile-pic">👤</div>
+                    <div>
+                        <h3 id="profileUsername">Usuario</h3>
+                        <p>Nivel actual: <span id="userLevel">Principiante</span></p>
+                    </div>
+                </div>
+                <div class="progress-bars">
+                    <div>
+                        <div class="progress-label">
+                            <span>Progreso general:</span>
+                            <span id="overallProgress">50%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress-label">
+                            <span>Nivel actual:</span>
+                            <span id="levelProgress">30%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="check-btn" style="background-color: #f44336; margin-top: 1rem;">Cerrar Sesión</button>
+            </div>
+        </div>
+        
+        <div class="sections">
+            <div class="section">
+                <h2>Ejercicios de Divisiones</h2>
+                <div class="level-buttons">
+                    <button class="level-btn active" data-level="1">Nivel 1</button>
+                    <button class="level-btn" data-level="2">Nivel 2</button>
+                    <button class="level-btn" data-level="3">Nivel 3</button>
+                    <button class="level-btn" data-level="4">Nivel 4</button>
+                    <button class="level-btn" data-level="5">Nivel 5</button>
+                </div>
+                <div class="exercise-area">
+                    <div class="problem">
+                        <span id="dividend">6</span> ÷ <span id="divisor">2</span> = <input type="number" class="answer-input" id="userAnswer">
+                    </div>
+                    <div class="visual-aid" id="visualAid"></div>
+                    <div class="grouping" id="groupingArea"></div>
+                    <button class="check-btn" id="checkAnswer">Comprobar</button>
+                    <div class="result" id="result"></div>
+                </div>
+                <button class="check-btn" id="nextProblem">Siguiente Problema</button>
+            </div>
+            
+            <div class="section">
+                <h2>Videos Explicativos</h2>
+                <div class="level-buttons">
+                    <button class="level-btn active" data-video-level="1">Nivel 1</button>
+                    <button class="level-btn" data-video-level="2">Nivel 2</button>
+                    <button class="level-btn" data-video-level="3">Nivel 3</button>
+                    <button class="level-btn" data-video-level="4">Nivel 4</button>
+                    <button class="level-btn" data-video-level="5">Nivel 5</button>
+                </div>
+                <div class="video-list" id="videoList">
+                    <div class="video-card">
+                        <div class="video-thumbnail">🎬</div>
+                        <div class="video-info">
+                            <h3>Introducción a las divisiones</h3>
+                            <p>Aprende los conceptos básicos de la división</p>
+                        </div>
+                        <button class="video-btn">Ver</button>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">🎬</div>
+                        <div class="video-info">
+                            <h3>Divisiones con ilustraciones</h3>
+                            <p>Visualiza cómo funcionan las divisiones</p>
+                        </div>
+                        <button class="video-btn">Ver</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Let s Divide - Plataforma educativa para aprender divisiones © 2025</p>
+    </footer>
+    
+    <script>
+        // Variables globales
+        const API = "http://localhost:3000/api"; // cámbiala a tu URL de Render cuando publiques
+        let token = null;
+        let currentLevel = 1;
+        let currentVideoLevel = 1;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let problems = {
+            1: [
+                {dividend: 6, divisor: 2},
+                {dividend: 4, divisor: 2},
+                {dividend: 3, divisor: 1},
+                {dividend: 8, divisor: 4},
+                {dividend: 5, divisor: 1}
+            ],
+            2: [
+                {dividend: 10, divisor: 2},
+                {dividend: 12, divisor: 3},
+                {dividend: 8, divisor: 2},
+                {dividend: 9, divisor: 3},
+                {dividend: 6, divisor: 3}
+            ],
+            3: [
+                {dividend: 15, divisor: 3},
+                {dividend: 20, divisor: 4},
+                {dividend: 18, divisor: 6},
+                {dividend: 14, divisor: 2},
+                {dividend: 16, divisor: 4}
+            ],
+            4: [
+                {dividend: 24, divisor: 6},
+                {dividend: 32, divisor: 4},
+                {dividend: 27, divisor: 9},
+                {dividend: 25, divisor: 5},
+                {dividend: 30, divisor: 5}
+            ],
+            5: [
+                {dividend: 48, divisor: 8},
+                {dividend: 63, divisor: 9},
+                {dividend: 56, divisor: 7},
+                {dividend: 72, divisor: 9},
+                {dividend: 81, divisor: 9}
+            ]
+        };
+        
+        let videos = {
+            1: [
+            {
+                title: "Introducción a las divisiones", 
+                description: "Aprende los conceptos básicos de la división",
+                url: "/videos/Introducción a la división.mp4" // Añadir la URL del video
+            },
+            {
+                title: "Divisiones con ilustraciones", 
+                description: "Visualiza cómo funcionan las divisiones",
+                url: "/videos/Divisiones con ilustraciones.mp4" // Añadir la URL del video
+            }
+            ],
+            2: [
+                {title: "Divisiones con números mayores", description: "Aprende a dividir números de dos cifras", url: "/videos/Divisiones con números mayores.mp4"},
+                {title: "División como reparto equitativo", description: "Entendiendo el concepto de repartir", url: "/videos/División como reparto equitativo.mp4"}
+            ],
+            3: [
+                {title: "Divisiones con resto", description: "Qué hacer cuando la división no es exacta", url: "/videos/Divisiones con resto.mp4"},
+                {title: "Problemas de divisiones", description: "Aplicando divisiones a problemas cotidianos", url: "/videos/Problemas de divisiones.mp4"}
+            ],
+            4: [
+                {title: "División larga", description: "Método para dividir números grandes", url: "/videos/División larga.mp4"},
+                {title: "Divisibilidad", description: "Aprende cuándo un número es divisible por otro", url: "/videos/Divisibilidad.mp4"}
+            ],
+            5: [
+                {title: "Fracciones y divisiones", description: "La relación entre fracciones y divisiones", url: "/videos/Fracciones y divisiones.mp4"},
+                {title: "Aplicaciones avanzadas", description: "Cómo usar divisiones en situaciones complejas", url: "/videos/Aplicaciones avanzadas.mp4"}
+            ]
+        };
+        
+        let currentProblemIndex = 0;
+        
+        // Elementos DOM
+        const levelButtons = document.querySelectorAll('.level-btn[data-level]');
+        const videoLevelButtons = document.querySelectorAll('.level-btn[data-video-level]');
+        const dividendElement = document.getElementById('dividend');
+        const divisorElement = document.getElementById('divisor');
+        const answerInput = document.getElementById('userAnswer');
+        const checkButton = document.getElementById('checkAnswer');
+        const nextButton = document.getElementById('nextProblem');
+        const resultElement = document.getElementById('result');
+        const visualAidElement = document.getElementById('visualAid');
+        const groupingAreaElement = document.getElementById('groupingArea');
+        const videoListElement = document.getElementById('videoList');
+        
+        // Elementos de login/registro
+        const showLoginBtn = document.getElementById('showLoginBtn');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginArea = document.getElementById('loginArea');
+        const userProfile = document.getElementById('userProfile');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+        const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const profileUsername = document.getElementById('profileUsername');
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            loadProblem();
+            updateVideoList();
+            checkLoginStatus();
+        });
+
+        function openVideoPlayer(title, videoUrl) {
+            // Crear un modal para reproducir el video
+            const modal = document.createElement('div');
+            modal.className = 'video-modal';
+            modal.innerHTML = `
+                <div class="video-modal-content">
+                    <div class="video-modal-header">
+                        <h3>${title}</h3>
+                        <button class="close-btn">&times;</button>
+                    </div>
+                    <div class="video-player">
+                        <iframe 
+                            width="560" 
+                            height="315" 
+                            src="${videoUrl}" 
+                            frameborder="0" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Agregar estilos CSS para el modal
+            const style = document.createElement('style');
+            style.textContent = `
+                .video-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0,0,0,0.7);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                }
+                .video-modal-content {
+                    background-color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    max-width: 800px;
+                    width: 90%;
+                }
+                .video-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 15px;
+                }
+                .close-btn {
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                }
+                .video-player {
+                    position: relative;
+                    padding-bottom: 56.25%; /* Proporción 16:9 */
+                    height: 0;
+                    overflow: hidden;
+                }
+                .video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Agregar funcionalidad para cerrar el modal
+            const closeBtn = modal.querySelector('.close-btn');
+            closeBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+        }
+        
+        // Configurar listeners de eventos
+        function setupEventListeners() {
+            // Nivel de ejercicios
+            levelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    levelButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentLevel = parseInt(button.dataset.level);
+                    currentProblemIndex = 0;
+                    loadProblem();
+                });
+            });
+            
+            // Nivel de videos
+            videoLevelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    videoLevelButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentVideoLevel = parseInt(button.dataset.videoLevel);
+                    updateVideoList();
+                });
+            });
+            
+            // Comprobar respuesta
+            checkButton.addEventListener('click', checkAnswer);
+            
+            // Siguiente problema
+            nextButton.addEventListener('click', () => {
+                currentProblemIndex = (currentProblemIndex + 1) % problems[currentLevel].length;
+                loadProblem();
+            });
+            
+            // Eventos de login/registro
+            showLoginBtn.addEventListener('click', () => {
+                loginForm.style.display = 'block';
+                loginArea.style.display = 'none';
+            });
+            
+            showRegisterBtn.addEventListener('click', () => {
+                registerForm.style.display = 'block';
+                loginArea.style.display = 'none';
+            });
+            
+            cancelLoginBtn.addEventListener('click', () => {
+                loginForm.style.display = 'none';
+                loginArea.style.display = 'block';
+            });
+            
+            cancelRegisterBtn.addEventListener('click', () => {
+                registerForm.style.display = 'none';
+                loginArea.style.display = 'block';
+            });
+            
+            loginBtn.addEventListener('click', login);
+            registerBtn.addEventListener('click', register);
+            logoutBtn.addEventListener('click', logout);
+        }
+        
+        // Cargar un problema en pantalla
+        function loadProblem() {
+            const problem = problems[currentLevel][currentProblemIndex];
+            dividendElement.textContent = problem.dividend;
+            divisorElement.textContent = problem.divisor;
+            answerInput.value = '';
+            resultElement.textContent = '';
+            resultElement.className = 'result';
+            
+            // Crear ayuda visual
+            createVisualAid(problem.dividend, problem.divisor);
+        }
+        
+        // Crear ayuda visual según el nivel
+        function createVisualAid(dividend, divisor) {
+            visualAidElement.innerHTML = '';
+            groupingAreaElement.innerHTML = '';
+            
+            if (currentLevel <= 2) {
+                // Niveles 1-2: Mostrar objetos simples
+                for (let i = 0; i < dividend; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'item cake';
+                    visualAidElement.appendChild(item);
+                }
+                
+                // Crear grupos para repartir
+                for (let i = 0; i < divisor; i++) {
+                    const group = document.createElement('div');
+                    group.className = 'group';
+                    groupingAreaElement.appendChild(group);
+                }
+            } else if (currentLevel <= 3) {
+                // Nivel 3: Mostrar objetos diferentes
+                for (let i = 0; i < dividend; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'item apple';
+                    visualAidElement.appendChild(item);
+                }
+            } else {
+                // Niveles 4-5: Sin ayuda visual, más avanzado
+                visualAidElement.style.display = 'none';
+                groupingAreaElement.style.display = 'none';
+                return;
+            }
+            
+            visualAidElement.style.display = 'flex';
+            groupingAreaElement.style.display = 'flex';
+        }
+        
+        // Comprobar la respuesta del usuario
+        function checkAnswer() {
+            const problem = problems[currentLevel][currentProblemIndex];
+            const userAnswer = parseInt(answerInput.value);
+            const correctAnswer = problem.dividend / problem.divisor;
+            
+            if (userAnswer === correctAnswer) {
+                resultElement.textContent = '¡Correcto! 🎉';
+                resultElement.className = 'result correct';
+                
+                // Si el usuario está logueado, guardar progreso
+                if (isLoggedIn) {
+                    saveProgress(currentLevel, currentProblemIndex, true);
+                }
+            } else {
+                resultElement.textContent = `Incorrecto. La respuesta correcta es ${correctAnswer}`;
+                resultElement.className = 'result incorrect';
+                
+                // Si el usuario está logueado, guardar intento fallido
+                if (isLoggedIn) {
+                    saveProgress(currentLevel, currentProblemIndex, false);
+                }
+            }
+        }
+        
+        // Actualizar la lista de videos según el nivel
+        function updateVideoList() {
+            videoListElement.innerHTML = '';
+            
+            videos[currentVideoLevel].forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                
+                videoCard.innerHTML = `
+                    <div class="video-thumbnail">🎬</div>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                    </div>
+                    <button class="video-btn">Ver</button>
+                `;
+                
+                videoListElement.appendChild(videoCard);
+                
+                // Agregar evento al botón de ver video
+const viewButton = videoCard.querySelector('.video-btn');
+viewButton.addEventListener('click', () => {
+    // Aquí es donde se reproduciría el video o se redireccionaría a su URL
+    const videoUrl = video.url; // Necesitarías agregar esta propiedad a tus objetos de video
+    
+    // Abrir el video en una ventana modal o reproducirlo directamente
+    openVideoPlayer(video.title, videoUrl);
+    
+    // Si el usuario está logueado, guardar que vio el video
+    if (isLoggedIn) {
+        saveVideoView(currentVideoLevel, video.title);
+    }
+});
+            });
+        }
+        
+        // Funciones de autenticación
+        async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (!username || !password) { alert('Por favor completa todos los campos'); return; }
+
+  try {
+    const res = await fetch(`${API}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error de login');
+
+    token = data.token;
+    localStorage.setItem('LD_TOKEN', token);
+    currentUser = data.user;
+    isLoggedIn = true;
+    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+
+    showUserProfile();
+    loginForm.style.display = 'none';
+    alert(`¡Bienvenido de nuevo, ${currentUser.username}!`);
+  } catch (e) {
+    alert(e.message);
+  }
+}
+        async function register() {
+  const username = document.getElementById('newUsername').value.trim();
+  const password = document.getElementById('newPassword').value.trim();
+  const age = parseInt(document.getElementById('age').value, 10);
+  if (!username || !password || !age) { alert('Por favor completa todos los campos'); return; }
+
+  try {
+    const res = await fetch(`${API}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, age })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error de registro');
+
+    token = data.token;
+    localStorage.setItem('LD_TOKEN', token);
+    currentUser = data.user;
+    isLoggedIn = true;
+    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+
+    showUserProfile();
+    registerForm.style.display = 'none';
+    alert(`¡Bienvenido, ${currentUser.username}!`);
+  } catch (e) {
+    alert(e.message);
+  }
+}
+        
+        function logout() {
+  isLoggedIn = false;
+  currentUser = null;
+  token = null;
+  localStorage.removeItem('LD_TOKEN');
+  localStorage.removeItem('LetsDivideUser');
+  userProfile.style.display = 'none';
+  loginArea.style.display = 'block';
+}
+        
+       async function checkLoginStatus() {
+  token = localStorage.getItem('LD_TOKEN');
+  if (!token) return; // no hay sesión
+
+  try {
+    const res = await fetch(`${API}/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw 0;
+    const data = await res.json();
+    currentUser = data.user;
+    isLoggedIn = true;
+    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+    showUserProfile();
+  } catch {
+    // token inválido → limpiar
+    logout();
+  }
+}
+        
+        function showUserProfile() {
+            if (!currentUser) return;
+            
+            loginArea.style.display = 'none';
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            userProfile.style.display = 'block';
+            
+            profileUsername.textContent = currentUser.username;
+            document.getElementById('userLevel').textContent = getUserLevel();
+            document.getElementById('overallProgress').textContent = `${currentUser.overallProgress || 0}%`;
+            document.getElementById('levelProgress').textContent = `${currentUser.levelProgress || 0}%`;
+            
+            // Actualizar barras de progreso
+            document.querySelector('#overallProgress').previousElementSibling.nextElementSibling.querySelector('.progress-fill').style.width = `${currentUser.overallProgress || 0}%`;
+            document.querySelector('#levelProgress').previousElementSibling.nextElementSibling.querySelector('.progress-fill').style.width = `${currentUser.levelProgress || 0}%`;
+        }
+        
+        function getUserLevel() {
+            const progress = currentUser.overallProgress || 0;
+            if (progress < 20) return 'Principiante';
+            if (progress < 40) return 'Aprendiz';
+            if (progress < 60) return 'Intermedio';
+            if (progress < 80) return 'Avanzado';
+            return 'Experto';
+        }
+        
+    
+        
+        async function saveProgress(level, problemIndex, isCorrect) {
+  if (!isLoggedIn || !currentUser || !token) return;
+  try {
+    const res = await fetch(`${API}/progress`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ nivel: level, problemaIndex: problemIndex, correcto: isCorrect })
+    });
+    const data = await res.json();
+    if (res.ok && data.stats) {
+      // Actualiza barras con lo que regresa el backend
+      const overall = Math.round(data.stats.progreso_general || 0);
+      const lvl = Math.round(data.stats.progreso_nivel_actual || 0);
+      document.getElementById('overallProgress').textContent = `${overall}%`;
+      document.getElementById('levelProgress').textContent = `${lvl}%`;
+      document.querySelector('.progress-bars #overallProgress').parentElement.nextElementSibling.querySelector('.progress-fill').style.width = `${overall}%`;
+      document.querySelector('.progress-bars #levelProgress').parentElement.nextElementSibling.querySelector('.progress-fill').style.width = `${lvl}%`;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+        
+       async function saveVideoView(level, videoTitle) {
+  if (!isLoggedIn || !currentUser || !token) return;
+  try {
+    await fetch(`${API}/video-view`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ nivelVideo: level, tituloVideo: videoTitle })
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+        
+    </script>
+</body>
+</html>
