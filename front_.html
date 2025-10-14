@@ -132,17 +132,10 @@
             background-position: center;
         }
         
-        .item.cake {
-            background-image: url('/proyecto talento/ima/pastel-de-cumpleanos.png');
-        }
-        
-        .item.apple {
-            background-image: url('/proyecto talento/ima/manzana.png');
-        }
-        
-        .item.cookie {
-            background-image: url('/proyecto talento/ima/galleta.png');
-        }
+        .item.cake   { background-image: url('ima/pastel-de-cumpleanos.png'); }
+.item.apple  { background-image: url('ima/manzana.png'); }
+.item.cookie { background-image: url('ima/galleta.png'); }
+
         
         .answer-input {
             font-size: 1.5rem;
@@ -458,10 +451,11 @@
     <footer>
         <p>Let s Divide - Plataforma educativa para aprender divisiones © 2025</p>
     </footer>
-
+    
     <script>
         // Variables globales
-        
+        const API = "http://https://lets-divide-api.onrender.com/:3000/api"; // cámbiala a tu URL de Render cuando publiques
+        let token = null;
         let currentLevel = 1;
         let currentVideoLevel = 1;
         let isLoggedIn = false;
@@ -509,29 +503,29 @@
             {
                 title: "Introducción a las divisiones", 
                 description: "Aprende los conceptos básicos de la división",
-                url: "/proyecto talento/videos/Introducción a la división.mp4" // Añadir la URL del video
+                url: "/videos/Introducción a la división.mp4" // Añadir la URL del video
             },
             {
                 title: "Divisiones con ilustraciones", 
                 description: "Visualiza cómo funcionan las divisiones",
-                url: "/proyecto talento/videos/Divisiones con ilustraciones.mp4" // Añadir la URL del video
+                url: "/videos/Divisiones con ilustraciones.mp4" // Añadir la URL del video
             }
             ],
             2: [
-                {title: "Divisiones con números mayores", description: "Aprende a dividir números de dos cifras", url: "/proyecto talento/videos/Divisiones con números mayores.mp4"},
-                {title: "División como reparto equitativo", description: "Entendiendo el concepto de repartir", url: "/proyecto talento/videos/División como reparto equitativo.mp4"}
+                {title: "Divisiones con números mayores", description: "Aprende a dividir números de dos cifras", url: "/videos/Divisiones con números mayores.mp4"},
+                {title: "División como reparto equitativo", description: "Entendiendo el concepto de repartir", url: "/videos/División como reparto equitativo.mp4"}
             ],
             3: [
-                {title: "Divisiones con resto", description: "Qué hacer cuando la división no es exacta", url: "/proyecto talento/videos/Divisiones con resto.mp4"},
-                {title: "Problemas de divisiones", description: "Aplicando divisiones a problemas cotidianos", url: "/proyecto talento/videos/Problemas de divisiones.mp4"}
+                {title: "Divisiones con resto", description: "Qué hacer cuando la división no es exacta", url: "/videos/Divisiones con resto.mp4"},
+                {title: "Problemas de divisiones", description: "Aplicando divisiones a problemas cotidianos", url: "/videos/Problemas de divisiones.mp4"}
             ],
             4: [
-                {title: "División larga", description: "Método para dividir números grandes", url: "/proyecto talento/videos/División larga.mp4"},
-                {title: "Divisibilidad", description: "Aprende cuándo un número es divisible por otro", url: "/proyecto talento/videos/Divisibilidad.mp4"}
+                {title: "División larga", description: "Método para dividir números grandes", url: "/videos/División larga.mp4"},
+                {title: "Divisibilidad", description: "Aprende cuándo un número es divisible por otro", url: "/videos/Divisibilidad.mp4"}
             ],
             5: [
-                {title: "Fracciones y divisiones", description: "La relación entre fracciones y divisiones", url: "/proyecto talento/videos/Fracciones y divisiones.mp4"},
-                {title: "Aplicaciones avanzadas", description: "Cómo usar divisiones en situaciones complejas", url: "/proyecto talento/videos/Aplicaciones avanzadas.mp4"}
+                {title: "Fracciones y divisiones", description: "La relación entre fracciones y divisiones", url: "/videos/Fracciones y divisiones.mp4"},
+                {title: "Aplicaciones avanzadas", description: "Cómo usar divisiones en situaciones complejas", url: "/videos/Aplicaciones avanzadas.mp4"}
             ]
         };
         
@@ -823,58 +817,91 @@ viewButton.addEventListener('click', () => {
         }
         
         // Funciones de autenticación
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (!username || !password) {
-                alert('Por favor completa todos los campos');
-                return;
-            }
-            
-            // En una aplicación real, esto se conectaría a la base de datos MySQL
-            // Aquí simulamos la autenticación para demo
-            simulateDbLogin(username, password);
-        }
-        
-        function register() {
-            const username = document.getElementById('newUsername').value;
-            const password = document.getElementById('newPassword').value;
-            const age = document.getElementById('age').value;
-            
-            if (!username || !password || !age) {
-                alert('Por favor completa todos los campos');
-                return;
-            }
-            
-            // En una aplicación real, esto se conectaría a la base de datos MySQL
-            // Aquí simulamos el registro para demo
-            simulateDbRegister(username, password, age);
-        }
+        async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (!username || !password) { alert('Por favor completa todos los campos'); return; }
+
+  try {
+    const res = await fetch(`${API}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error de login');
+
+    token = data.token;
+    localStorage.setItem('LD_TOKEN', token);
+    currentUser = data.user;
+    isLoggedIn = true;
+    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+
+    showUserProfile();
+    loginForm.style.display = 'none';
+    alert(`¡Bienvenido de nuevo, ${currentUser.username}!`);
+  } catch (e) {
+    alert(e.message);
+  }
+}
+        async function register() {
+  const username = document.getElementById('newUsername').value.trim();
+  const password = document.getElementById('newPassword').value.trim();
+  const age = parseInt(document.getElementById('age').value, 10);
+  if (!username || !password || !age) { alert('Por favor completa todos los campos'); return; }
+
+  try {
+    const res = await fetch(`${API}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, age })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error de registro');
+
+    token = data.token;
+    localStorage.setItem('LD_TOKEN', token);
+    currentUser = data.user;
+    isLoggedIn = true;
+    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+
+    showUserProfile();
+    registerForm.style.display = 'none';
+    alert(`¡Bienvenido, ${currentUser.username}!`);
+  } catch (e) {
+    alert(e.message);
+  }
+}
         
         function logout() {
-            isLoggedIn = false;
-            currentUser = null;
-            userProfile.style.display = 'none';
-            loginArea.style.display = 'block';
-            
-            // En una aplicación real, esto haría logout en el servidor
-            console.log('Usuario desconectado');
-        }
+  isLoggedIn = false;
+  currentUser = null;
+  token = null;
+  localStorage.removeItem('LD_TOKEN');
+  localStorage.removeItem('LetsDivideUser');
+  userProfile.style.display = 'none';
+  loginArea.style.display = 'block';
+}
         
-        function checkLoginStatus() {
-            // En una aplicación real, verificaría la sesión en el servidor
-            // Aquí simulamos para demo
-            if (localStorage.getItem('LetsDivideUser')) {
-                try {
-                    currentUser = JSON.parse(localStorage.getItem('LetsDivideUser'));
-                    isLoggedIn = true;
-                    showUserProfile();
-                } catch(e) {
-                    console.error('Error al cargar sesión de usuario:', e);
-                }
-            }
-        }
+       async function checkLoginStatus() {
+  token = localStorage.getItem('LD_TOKEN');
+  if (!token) return; // no hay sesión
+
+  try {
+    const res = await fetch(`${API}/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw 0;
+    const data = await res.json();
+    currentUser = data.user;
+    isLoggedIn = true;
+    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
+    showUserProfile();
+  } catch {
+    // token inválido → limpiar
+    logout();
+  }
+}
         
         function showUserProfile() {
             if (!currentUser) return;
@@ -903,522 +930,50 @@ viewButton.addEventListener('click', () => {
             return 'Experto';
         }
         
-        // Funciones de simulación de base de datos
-        function simulateDbLogin(username, password) {
-            // En una aplicación real esto sería una solicitud AJAX a tu API
-            console.log(`Intento de login: ${username}, ${password}`);
-            
-            // Simulación de respuesta exitosa
-            setTimeout(() => {
-                // Verificar si el usuario existe en localStorage (simulación)
-                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
-                const user = users.find(u => u.username === username && u.password === password);
-                
-                if (user) {
-                    currentUser = {
-                        id: user.id,
-                        username: user.username,
-                        age: user.age,
-                        overallProgress: user.overallProgress || 0,
-                        levelProgress: user.levelProgress || 0
-                    };
-                    isLoggedIn = true;
-                    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
-                    showUserProfile();
-                    alert(`¡Bienvenido de nuevo, ${username}!`);
-                } else {
-                    alert('Usuario o contraseña incorrectos');
-                }
-            }, 500);
-        }
+    
         
-        function simulateDbRegister(username, password, age) {
-            // En una aplicación real esto sería una solicitud AJAX a tu API
-            console.log(`Intento de registro: ${username}, ${password}, ${age}`);
-            
-            // Simulación de respuesta exitosa
-            setTimeout(() => {
-                // Verificar si el usuario ya existe en localStorage (simulación)
-                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
-                if (users.some(u => u.username === username)) {
-                    alert('Este nombre de usuario ya existe');
-                    return;
-                }
-                
-                // Crear nuevo usuario
-                const newUser = {
-                    id: Date.now().toString(), // Simulación de ID único
-                    username,
-                    password,
-                    age,
-                    overallProgress: 0,
-                    levelProgress: 0,
-                    completedProblems: {},
-                    viewedVideos: []
-                };
-                
-                // Guardar usuario en localStorage (simulación)
-                users.push(newUser);
-                localStorage.setItem('LetsDivideUsers', JSON.stringify(users));
-                
-                // Iniciar sesión automáticamente
-                currentUser = {
-                    id: newUser.id,
-                    username: newUser.username,
-                    age: newUser.age,
-                    overallProgress: 0,
-                    levelProgress: 0
-                };
-                
-                isLoggedIn = true;
-                localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
-                showUserProfile();
-                alert(`¡Bienvenido, ${username}! Tu cuenta ha sido creada con éxito.`);
-            }, 500);
-        }
+        async function saveProgress(level, problemIndex, isCorrect) {
+  if (!isLoggedIn || !currentUser || !token) return;
+  try {
+    const res = await fetch(`${API}/progress`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ nivel: level, problemaIndex: problemIndex, correcto: isCorrect })
+    });
+    const data = await res.json();
+    if (res.ok && data.stats) {
+      // Actualiza barras con lo que regresa el backend
+      const overall = Math.round(data.stats.progreso_general || 0);
+      const lvl = Math.round(data.stats.progreso_nivel_actual || 0);
+      document.getElementById('overallProgress').textContent = `${overall}%`;
+      document.getElementById('levelProgress').textContent = `${lvl}%`;
+      document.querySelector('.progress-bars #overallProgress').parentElement.nextElementSibling.querySelector('.progress-fill').style.width = `${overall}%`;
+      document.querySelector('.progress-bars #levelProgress').parentElement.nextElementSibling.querySelector('.progress-fill').style.width = `${lvl}%`;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
         
-        function saveProgress(level, problemIndex, isCorrect) {
-            if (!isLoggedIn || !currentUser) return;
-            
-            // En una aplicación real, esto guardaría en MySQL
-            console.log(`Guardando progreso: Nivel ${level}, Problema ${problemIndex}, Correcto: ${isCorrect}`);
-            
-            // Simulación de actualización de progreso
-            setTimeout(() => {
-                // Recuperar usuarios de localStorage
-                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                
-                if (userIndex !== -1) {
-                    // Actualizar progreso del problema
-                    if (!users[userIndex].completedProblems) {
-                        users[userIndex].completedProblems = {};
-                    }
-                    
-                    const problemKey = `${level}-${problemIndex}`;
-                    users[userIndex].completedProblems[problemKey] = isCorrect;
-                    
-                    // Calcular progreso general
-                    const totalProblems = Object.keys(problems).reduce((sum, lvl) => sum + problems[lvl].length, 0);
-                    const completedCorrect = Object.values(users[userIndex].completedProblems).filter(v => v === true).length;
-                    const overallProgress = Math.round((completedCorrect / totalProblems) * 100);
-                    
-                    // Calcular progreso de nivel actual
-                    const levelProblems = problems[level].length;
-                    const levelCompletedCorrect = Object.keys(users[userIndex].completedProblems)
-                        .filter(k => k.startsWith(`${level}-`) && users[userIndex].completedProblems[k] === true)
-                        .length;
-                    const levelProgress = Math.round((levelCompletedCorrect / levelProblems) * 100);
-                    
-                    // Actualizar usuario
-                    users[userIndex].overallProgress = overallProgress;
-                    users[userIndex].levelProgress = levelProgress;
-                    
-                    // Actualizar currentUser
-                    currentUser.overallProgress = overallProgress;
-                    currentUser.levelProgress = levelProgress;
-                    
-                    // Guardar cambios
-                    localStorage.setItem('LetsDivideUsers', JSON.stringify(users));
-                    localStorage.setItem('LetsDivideUser', JSON.stringify(currentUser));
-                    
-                    // Actualizar interfaz
-                    showUserProfile();
-                }
-            }, 300);
-        }
+       async function saveVideoView(level, videoTitle) {
+  if (!isLoggedIn || !currentUser || !token) return;
+  try {
+    await fetch(`${API}/video-view`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ nivelVideo: level, tituloVideo: videoTitle })
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
         
-        function saveVideoView(level, videoTitle) {
-            if (!isLoggedIn || !currentUser) return;
-            
-            // En una aplicación real, esto guardaría en MySQL
-            console.log(`Guardando visualización de video: Nivel ${level}, Título: ${videoTitle}`);
-            
-            // Simulación de actualización de videos vistos
-            setTimeout(() => {
-                // Recuperar usuarios de localStorage
-                const users = JSON.parse(localStorage.getItem('LetsDivideUsers') || '[]');
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                
-                if (userIndex !== -1) {
-                    // Actualizar videos vistos
-                    if (!users[userIndex].viewedVideos) {
-                        users[userIndex].viewedVideos = [];
-                    }
-                    
-                    const videoKey = `${level}-${videoTitle}`;
-                    if (!users[userIndex].viewedVideos.includes(videoKey)) {
-                        users[userIndex].viewedVideos.push(videoKey);
-                    }
-                    
-                    // Guardar cambios
-                    localStorage.setItem('LetsDivideUsers', JSON.stringify(users));
-                }
-            }, 300);
-        }
-        
-        // Código para conectar con MySQL (simulado para este ejemplo)
-        // En una aplicación real, esto se manejaría en el servidor con PHP, Node.js, etc.
-        
-        /*
-        ESTRUCTURA DE LA BASE DE DATOS MYSQL:
-        
-        -- Creación de la base de datos
-        CREATE DATABASE dividivertido;
-        USE dividivertido;
-        
-        -- Tabla de usuarios
-        CREATE TABLE usuarios (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL,
-            edad INT NOT NULL,
-            fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-            ultimo_acceso DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
-        
-        -- Tabla de progreso
-        CREATE TABLE progreso (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            usuario_id INT NOT NULL,
-            nivel INT NOT NULL,
-            problema_index INT NOT NULL,
-            correcto BOOLEAN NOT NULL,
-            fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-        );
-        
-        -- Tabla de videos vistos
-        CREATE TABLE videos_vistos (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            usuario_id INT NOT NULL,
-            nivel_video INT NOT NULL,
-            titulo_video VARCHAR(100) NOT NULL,
-            fecha_visto DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-        );
-        
-        -- Tabla de estadísticas de usuario
-        CREATE TABLE estadisticas (
-            usuario_id INT PRIMARY KEY,
-            progreso_general FLOAT DEFAULT 0,
-            progreso_nivel_actual FLOAT DEFAULT 0,
-            nivel_actual INT DEFAULT 1,
-            problemas_completados INT DEFAULT 0,
-            aciertos INT DEFAULT 0,
-            fallos INT DEFAULT 0,
-            ultima_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-        );
-        */
-        
-        /* 
-        EJEMPLO DE CÓDIGO PHP PARA LA CONEXIÓN Y OPERACIONES CON LA BASE DE DATOS:
-        
-        <?php
-        // Conexión a la base de datos
-        $servername = "localhost";
-        $username = "usuario_db";
-        $password = "contraseña_db";
-        $dbname = "dividivertido";
-        
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        
-        if ($conn->connect_error) {
-            die("Conexión fallida: " . $conn->connect_error);
-        }
-        
-        // Función para registrar un nuevo usuario
-        function registrarUsuario($username, $password, $edad) {
-            global $conn;
-            
-            // Hash de la contraseña para mayor seguridad
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            
-            $sql = "INSERT INTO usuarios (username, password, edad) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssi", $username, $hashedPassword, $edad);
-            
-            if ($stmt->execute()) {
-                $usuario_id = $stmt->insert_id;
-                
-                // Crear registro en estadísticas
-                $sql = "INSERT INTO estadisticas (usuario_id) VALUES (?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $usuario_id);
-                $stmt->execute();
-                
-                return $usuario_id;
-            } else {
-                return false;
-            }
-        }
-        
-        // Función para verificar login
-        function verificarLogin($username, $password) {
-            global $conn;
-            
-            $sql = "SELECT id, password FROM usuarios WHERE username = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($result->num_rows === 1) {
-                $row = $result->fetch_assoc();
-                if (password_verify($password, $row["password"])) {
-                    // Actualizar último acceso
-                    $sql = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("i", $row["id"]);
-                    $stmt->execute();
-                    
-                    return $row["id"];
-                }
-            }
-            
-            return false;
-        }
-        
-        // Función para guardar progreso
-        function guardarProgreso($usuario_id, $nivel, $problema_index, $correcto) {
-            global $conn;
-            
-            $sql = "INSERT INTO progreso (usuario_id, nivel, problema_index, correcto) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iiib", $usuario_id, $nivel, $problema_index, $correcto);
-            
-            if ($stmt->execute()) {
-                // Actualizar estadísticas
-                actualizarEstadisticas($usuario_id);
-                return true;
-            } else {
-                return false;
-            }
-        }
-        
-        // Función para registrar video visto
-        function registrarVideoVisto($usuario_id, $nivel_video, $titulo_video) {
-            global $conn;
-            
-            $sql = "INSERT INTO videos_vistos (usuario_id, nivel_video, titulo_video) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iis", $usuario_id, $nivel_video, $titulo_video);
-            
-            return $stmt->execute();
-        }
-        
-        // Función para actualizar estadísticas
-        function actualizarEstadisticas($usuario_id) {
-            global $conn;
-            
-            // Obtener datos de progreso
-            $sql = "SELECT 
-                    COUNT(*) as total_problemas,
-                    SUM(CASE WHEN correcto = 1 THEN 1 ELSE 0 END) as aciertos,
-                    SUM(CASE WHEN correcto = 0 THEN 1 ELSE 0 END) as fallos
-                FROM progreso 
-                WHERE usuario_id = ?";
-            
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $usuario_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-            
-            $total_problemas = $row["total_problemas"];
-            $aciertos = $row["aciertos"];
-            $fallos = $row["fallos"];
-            
-            // Calcular nivel actual (basado en aciertos)
-            $nivel_actual = 1;
-            if ($aciertos >= 25) $nivel_actual = 5;
-            else if ($aciertos >= 15) $nivel_actual = 4;
-            else if ($aciertos >= 10) $nivel_actual = 3;
-            else if ($aciertos >= 5) $nivel_actual = 2;
-            
-            // Calcular progreso general (aproximado)
-            $progreso_general = min(100, ($aciertos / 50) * 100); // Asumiendo 50 problemas en total
-            
-            // Calcular progreso del nivel actual
-            $sql = "SELECT 
-                    COUNT(*) as problemas_nivel,
-                    SUM(CASE WHEN correcto = 1 THEN 1 ELSE 0 END) as aciertos_nivel
-                FROM progreso 
-                WHERE usuario_id = ? AND nivel = ?";
-            
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ii", $usuario_id, $nivel_actual);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-            
-            $problemas_nivel = $row["problemas_nivel"];
-            $aciertos_nivel = $row["aciertos_nivel"];
-            
-            $progreso_nivel = ($problemas_nivel > 0) ? ($aciertos_nivel / $problemas_nivel) * 100 : 0;
-            
-            // Actualizar estadísticas
-            $sql = "UPDATE estadisticas SET 
-                    progreso_general = ?,
-                    progreso_nivel_actual = ?,
-                    nivel_actual = ?,
-                    problemas_completados = ?,
-                    aciertos = ?,
-                    fallos = ?,
-                    ultima_actualizacion = NOW()
-                WHERE usuario_id = ?";
-            
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ddiiiii", $progreso_general, $progreso_nivel, $nivel_actual, $total_problemas, $aciertos, $fallos, $usuario_id);
-            
-            return $stmt->execute();
-        }
-        
-        // Función para obtener perfil de usuario
-        function obtenerPerfil($usuario_id) {
-            global $conn;
-            
-            $sql = "SELECT u.username, u.edad, e.* 
-                    FROM usuarios u
-                    JOIN estadisticas e ON u.id = e.usuario_id
-                    WHERE u.id = ?";
-            
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $usuario_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($result->num_rows === 1) {
-                return $result->fetch_assoc();
-            } else {
-                return false;
-            }
-        }
-        ?>
-        */
-        
-        /* 
-        EJEMPLO DE API ENDPOINTS PARA CONECTAR FRONTEND Y BACKEND:
-        
-        // LOGIN
-        app.post('/api/login', (req, res) => {
-            const { username, password } = req.body;
-            
-            // Llamar a función PHP o usar Node.js con MySQL
-            db.query('SELECT id, password FROM usuarios WHERE username = ?', [username], (err, results) => {
-                if (err) return res.status(500).json({ error: 'Error de servidor' });
-                
-                if (results.length === 0) {
-                    return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
-                }
-                
-                const user = results[0];
-                const passwordMatch = bcrypt.compareSync(password, user.password);
-                
-                if (!passwordMatch) {
-                    return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
-                }
-                
-                // Actualizar último acceso
-                db.query('UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?', [user.id]);
-                
-                // Obtener perfil
-                db.query(`
-                    SELECT u.username, u.edad, e.* 
-                    FROM usuarios u
-                    JOIN estadisticas e ON u.id = e.usuario_id
-                    WHERE u.id = ?
-                `, [user.id], (err, profileResults) => {
-                    if (err) return res.status(500).json({ error: 'Error al cargar perfil' });
-                    
-                    // Crear token JWT
-                    const token = jwt.sign({ id: user.id }, 'tu_clave_secreta', { expiresIn: '1h' });
-                    
-                    res.json({
-                        token,
-                        user: profileResults[0]
-                    });
-                });
-            });
-        });
-        
-        // REGISTRO
-        app.post('/api/register', (req, res) => {
-            const { username, password, age } = req.body;
-            
-            // Verificar si usuario existe
-            db.query('SELECT id FROM usuarios WHERE username = ?', [username], (err, results) => {
-                if (err) return res.status(500).json({ error: 'Error de servidor' });
-                
-                if (results.length > 0) {
-                    return res.status(409).json({ error: 'Este nombre de usuario ya existe' });
-                }
-                
-                // Hash de contraseña
-                const hashedPassword = bcrypt.hashSync(password, 10);
-                
-                // Insertar usuario
-                db.query('INSERT INTO usuarios (username, password, edad) VALUES (?, ?, ?)', 
-                    [username, hashedPassword, age], (err, result) => {
-                    if (err) return res.status(500).json({ error: 'Error al registrar usuario' });
-                    
-                    const userId = result.insertId;
-                    
-                    // Crear estadísticas
-                    db.query('INSERT INTO estadisticas (usuario_id) VALUES (?)', [userId], (err) => {
-                        if (err) return res.status(500).json({ error: 'Error al crear perfil' });
-                        
-                        // Crear token JWT
-                        const token = jwt.sign({ id: userId }, 'tu_clave_secreta', { expiresIn: '1h' });
-                        
-                        res.json({
-                            token,
-                            user: {
-                                id: userId,
-                                username,
-                                edad: age,
-                                progreso_general: 0,
-                                progreso_nivel_actual: 0,
-                                nivel_actual: 1
-                            }
-                        });
-                    });
-                });
-            });
-        });
-        
-        // GUARDAR PROGRESO
-        app.post('/api/progress', authenticateToken, (req, res) => {
-            const { nivel, problemaIndex, correcto } = req.body;
-            const userId = req.user.id;
-            
-            db.query('INSERT INTO progreso (usuario_id, nivel, problema_index, correcto) VALUES (?, ?, ?, ?)',
-                [userId, nivel, problemaIndex, correcto], (err) => {
-                if (err) return res.status(500).json({ error: 'Error al guardar progreso' });
-                
-                // Actualizar estadísticas
-                actualizarEstadisticas(userId, (err, stats) => {
-                    if (err) return res.status(500).json({ error: 'Error al actualizar estadísticas' });
-                    
-                    res.json({ success: true, stats });
-                });
-            });
-        });
-        
-        // REGISTRAR VIDEO VISTO
-        app.post('/api/video-view', authenticateToken, (req, res) => {
-            const { nivelVideo, tituloVideo } = req.body;
-            const userId = req.user.id;
-            
-            db.query('INSERT INTO videos_vistos (usuario_id, nivel_video, titulo_video) VALUES (?, ?, ?)',
-                [userId, nivelVideo, tituloVideo], (err) => {
-                if (err) return res.status(500).json({ error: 'Error al registrar video visto' });
-                
-                res.json({ success: true });
-            });
-        });
-        */
     </script>
 </body>
 </html>
