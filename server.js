@@ -5,6 +5,10 @@ import cors from "cors";
 import mysql from "mysql2/promise";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { fileURLToPath } from "url";
+import path from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // ====== Config ======
 const {
@@ -194,6 +198,13 @@ app.post("/api/video-view", auth, async (req, res) => {
     console.error(e);
     res.status(500).json({ error: "Error al registrar video visto" });
   }
+});
+
+app.use(express.static(path.join(__dirname)));
+
+// Raíz: entrega front.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "front.html"));
 });
 
 app.listen(PORT, () => console.log("API corriendo en puerto", PORT));
