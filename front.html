@@ -904,22 +904,39 @@ viewButton.addEventListener('click', () => {
 }
         
         function showUserProfile() {
-            if (!currentUser) return;
-            
-            loginArea.style.display = 'none';
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'none';
-            userProfile.style.display = 'block';
-            
-            profileUsername.textContent = currentUser.username;
-            document.getElementById('userLevel').textContent = getUserLevel();
-            document.getElementById('overallProgress').textContent = `${currentUser.overallProgress || 0}%`;
-            document.getElementById('levelProgress').textContent = `${currentUser.levelProgress || 0}%`;
-            
-            // Actualizar barras de progreso
-            document.querySelector('#overallProgress').previousElementSibling.nextElementSibling.querySelector('.progress-fill').style.width = `${currentUser.overallProgress || 0}%`;
-            document.querySelector('#levelProgress').previousElementSibling.nextElementSibling.querySelector('.progress-fill').style.width = `${currentUser.levelProgress || 0}%`;
-        }
+  if (!currentUser) return;
+
+  // mostrar/ocultar secciones
+  loginArea.style.display = 'none';
+  loginForm.style.display = 'none';
+  registerForm.style.display = 'none';
+  userProfile.style.display = 'block';
+
+  // textos
+  profileUsername.textContent = currentUser.username;
+  document.getElementById('userLevel').textContent = getUserLevel();
+
+  const overall = Math.round(currentUser.overallProgress || 0);
+  const level   = Math.round(currentUser.levelProgress   || 0);
+
+  // porcentajes visibles
+  const overallSpan = document.getElementById('overallProgress');
+  const levelSpan   = document.getElementById('levelProgress');
+  if (overallSpan) overallSpan.textContent = `${overall}%`;
+  if (levelSpan)   levelSpan.textContent   = `${level}%`;
+
+  // rellenos de barras (agarra el .progress-bar que está justo debajo)
+  const overallFill = overallSpan
+    ? overallSpan.closest('.progress-label').nextElementSibling.querySelector('.progress-fill')
+    : null;
+  const levelFill = levelSpan
+    ? levelSpan.closest('.progress-label').nextElementSibling.querySelector('.progress-fill')
+    : null;
+
+  if (overallFill) overallFill.style.width = `${overall}%`;
+  if (levelFill)   levelFill.style.width   = `${level}%`;
+}
+
         
         function getUserLevel() {
             const progress = currentUser.overallProgress || 0;
@@ -934,6 +951,7 @@ viewButton.addEventListener('click', () => {
         
         async function saveProgress(level, problemIndex, isCorrect) {
   if (!isLoggedIn || !currentUser || !token) return;
+
   try {
     const res = await fetch(`${API}/progress`, {
       method: 'POST',
@@ -943,20 +961,36 @@ viewButton.addEventListener('click', () => {
       },
       body: JSON.stringify({ nivel: level, problemaIndex: problemIndex, correcto: isCorrect })
     });
+
     const data = await res.json();
+
     if (res.ok && data.stats) {
-      // Actualiza barras con lo que regresa el backend
+      // Porcentajes devueltos por el backend
       const overall = Math.round(data.stats.progreso_general || 0);
-      const lvl = Math.round(data.stats.progreso_nivel_actual || 0);
-      document.getElementById('overallProgress').textContent = `${overall}%`;
-      document.getElementById('levelProgress').textContent = `${lvl}%`;
-      document.querySelector('.progress-bars #overallProgress').parentElement.nextElementSibling.querySelector('.progress-fill').style.width = `${overall}%`;
-      document.querySelector('.progress-bars #levelProgress').parentElement.nextElementSibling.querySelector('.progress-fill').style.width = `${lvl}%`;
+      const lvl     = Math.round(data.stats.progreso_nivel_actual || 0);
+
+      // Actualiza textos
+      const overallSpan = document.getElementById('overallProgress');
+      const levelSpan   = document.getElementById('levelProgress');
+      if (overallSpan) overallSpan.textContent = `${overall}%`;
+      if (levelSpan)   levelSpan.textContent   = `${lvl}%`;
+
+      // Actualiza relleno de barras, navegando desde la etiqueta correspondiente
+      const overallFill = overallSpan
+        ? overallSpan.closest('.progress-label').nextElementSibling?.querySelector('.progress-fill')
+        : null;
+      const levelFill = levelSpan
+        ? levelSpan.closest('.progress-label').nextElementSibling?.querySelector('.progress-fill')
+        : null;
+
+      if (overallFill) overallFill.style.width = `${overall}%`;
+      if (levelFill)   levelFill.style.width   = `${lvl}%`;
     }
   } catch (e) {
     console.error(e);
   }
 }
+
         
        async function saveVideoView(level, videoTitle) {
   if (!isLoggedIn || !currentUser || !token) return;
